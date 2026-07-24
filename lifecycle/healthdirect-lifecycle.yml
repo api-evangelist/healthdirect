@@ -1,0 +1,26 @@
+generated: '2026-07-24'
+method: searched
+source: >-
+  NHSD FHIR Implementation Guide (build.fhir.nhsd.healthdirect.org.au, v4.0.1) +
+  NHSD integration solution overview
+versioning:
+  scheme: uri-path
+  current: v4
+  fhir_version: 4.0.1 (R4)
+  ig_version: v4.0.1
+  docs: https://build.fhir.nhsd.healthdirect.org.au/v4/index.html
+  note: >-
+    FHIR Implementation Guide is versioned as v4 in the URI path; both the
+    Outbound and Inbound (ingestion) guides publish as v4.0.1. IG host is
+    geo-restricted to Australia (HTTP 403 elsewhere).
+deprecation:
+  policy_url: null
+  sunset_header: false
+  note: No public deprecation policy or RFC 8594 Sunset/Deprecation header support documented.
+sla:
+  uptime_target: '99%'
+  source: NHSD Booking Provider Integration Solution Overview (min. 99% uptime)
+  url: null
+status_page: null
+status_page_note: No public status/uptime dashboard was found.
+deprecated_operations: []

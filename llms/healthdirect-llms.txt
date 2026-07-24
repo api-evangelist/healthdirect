@@ -1,0 +1,34 @@
+# Healthdirect Australia — National Health Services Directory (NHSD)
+
+> Healthdirect Australia is a national, government-owned, not-for-profit operator of core Australian digital-health infrastructure. Its developer surface is the National Health Services Directory (NHSD) Integration Hub, exposing standards-based HL7 FHIR R4 APIs over an authoritative directory of 400,000+ health service and practitioner records, aligned to the HL7 AU Provider Directory (AU-PD) guide with SNOMED CT-AU terminology and G-NAF geocoded addresses. Integration is gated behind formal onboarding; APIs are secured with OAuth 2.0 client-credentials plus an x-api-key header. Home market: Australia.
+
+## APIs
+- [NHSD FHIR API](https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/documentation): Real-time, read-only FHIR API over Organization, HealthcareService, PractitionerRole, and Practitioner (AU-PD). Base: https://api.fhir.nhsd.healthdirect.org.au/v4
+- [NHSD FHIR Bulk Data Export](https://build.fhir.nhsd.healthdirect.org.au/v4/bulkexports.html): Read-only FHIR bulk data export for full-directory retrieval.
+- [NHSD FHIR Ingestion & Data Acquisition Hub](https://build.fhir.nhsd.healthdirect.org.au/ingestion/index.html): Inbound FHIR interface for approved data-contributing sources.
+- [NHSD Provider Appointments API](https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/documentation): Real-time appointment availability from certified booking platforms.
+- [NHSD Search Widget](https://media.healthdirect.org.au/publications/NHSD_widget-implementation-guide.pdf): Embeddable directory search component.
+
+## Docs
+- [Developer & Integration Hub](https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub)
+- [Documentation](https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/documentation)
+- [Getting Started (onboarding)](https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/getting-started)
+- [Standards](https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/standards)
+- [API Reference (FHIR IG v4, AU geo-restricted)](https://build.fhir.nhsd.healthdirect.org.au/v4/index.html)
+- [NHSD Developer Guide (PDF)](https://media.healthdirect.org.au/publications/NHSD_Developer-Guide.pdf)
+
+## Specs & artifacts
+- [Postman collection](https://raw.githubusercontent.com/api-evangelist/healthdirect/refs/heads/main/collections/nhsd-developers-portal.postman_collection.json)
+- [Authentication](https://raw.githubusercontent.com/api-evangelist/healthdirect/refs/heads/main/authentication/healthdirect-authentication.yml)
+- [Conventions](https://raw.githubusercontent.com/api-evangelist/healthdirect/refs/heads/main/conventions/healthdirect-conventions.yml)
+- [Error catalog](https://raw.githubusercontent.com/api-evangelist/healthdirect/refs/heads/main/errors/healthdirect-problem-types.yml)
+- [Data model](https://raw.githubusercontent.com/api-evangelist/healthdirect/refs/heads/main/data-model/healthdirect-data-model.yml)
+- [Conformance](https://raw.githubusercontent.com/api-evangelist/healthdirect/refs/heads/main/conformance/healthdirect-conformance.yml)
+
+## Auth
+- OAuth 2.0 client_credentials (token endpoint /iam/oauth/token) returning `accessToken`, sent as `Authorization: Bearer`, plus a static `x-api-key` header on every request. No SMART-on-FHIR scopes. Credentials issued via NHSD onboarding.
+
+## Support
+- [Technical support](https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/technical-support)
+- [Onboarding request](https://healthdirect-serviceline.atlassian.net/servicedesk/customer/portal/3/group/12/create/44)
+- Security: security@healthdirect.org.au

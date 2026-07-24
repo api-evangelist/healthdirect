@@ -1,0 +1,47 @@
+generated: '2026-07-24'
+method: searched
+source: live probes of Healthdirect + NHSD hosts
+notes: >-
+  The NHSD API/IAM/IG hosts (api.fhir[.int].nhsd.healthdirect.org.au,
+  iam.int.nhsd.healthdirect.org.au, build.fhir.nhsd.healthdirect.org.au) sit
+  behind an Amazon CloudFront distribution that geo-blocks all non-Australian
+  requests (HTTP 403 "configured to block access from your country"), so no
+  well-known discovery documents (smart-configuration, openid-configuration,
+  metadata/CapabilityStatement) could be fetched from those hosts from outside
+  Australia. The consumer/corporate hosts publish real RFC 9116 security.txt.
+hosts:
+- host: https://www.healthdirect.gov.au
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: healthdirect-security.txt
+- host: https://about.healthdirect.gov.au
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: healthdirect-about-security.txt
+  - path: /llms.txt
+    status: 404
+- host: https://api.fhir.int.nhsd.healthdirect.org.au
+  documents:
+  - path: /v4/metadata
+    status: 403
+    note: FHIR CapabilityStatement — CloudFront geo-block (non-AU)
+  - path: /.well-known/smart-configuration
+    status: 403
+    note: CloudFront geo-block (non-AU)
+  - path: /openapi.json
+    status: 403
+    note: CloudFront geo-block (non-AU); no OpenAPI is published — the machine-readable contract is the FHIR IG + Postman collection
+- host: https://iam.int.nhsd.healthdirect.org.au
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 403
+    note: 'API Gateway "Missing Authentication Token"; OAuth2 client_credentials token endpoint is /iam/oauth/token'
+  - path: /.well-known/oauth-authorization-server
+    status: 403
+- host: https://build.fhir.nhsd.healthdirect.org.au
+  documents:
+  - path: /v4/index.html
+    status: 403
+    note: NHSD FHIR Implementation Guide (v4.0.1) — CloudFront geo-block (non-AU)

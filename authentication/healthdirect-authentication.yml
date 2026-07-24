@@ -1,0 +1,38 @@
+generated: '2026-07-24'
+method: searched
+source: collections/nhsd-developers-portal.postman_collection.json + NHSD Developer Guide
+docs: https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/documentation
+summary:
+  types: [oauth2, apiKey]
+  api_key_in: [header]
+  oauth2_flows: [clientCredentials]
+  note: >-
+    Dual credential model — every NHSD FHIR request carries BOTH an OAuth 2.0
+    bearer access token AND a static x-api-key header. This is a system-to-system
+    provider-directory API; there is no SMART-on-FHIR user/patient authorization
+    (no patient/*.read or system/*.rw scopes documented).
+schemes:
+- name: oauth2ClientCredentials
+  type: oauth2
+  flow: clientCredentials
+  tokenUrl: https://iam.int.nhsd.healthdirect.org.au/iam/oauth/token
+  token_url_note: Integrator test environment; production IAM host mirrors this path.
+  grant_params: [grant_type=client_credentials, client_id, client_secret]
+  request_content_type: application/x-www-form-urlencoded
+  token_response_field: accessToken
+  token_use: 'Sent as Authorization: Bearer <accessToken> on FHIR requests.'
+  scopes: []
+  sources: [collections/nhsd-developers-portal.postman_collection.json]
+- name: apiKey
+  type: apiKey
+  in: header
+  parameter_name: x-api-key
+  applies_to: [token request, all FHIR resource requests]
+  sources: [collections/nhsd-developers-portal.postman_collection.json]
+onboarding:
+  gated: true
+  note: >-
+    Client credentials and API key are issued only after a formal onboarding —
+    a connection request for the Integrator Test Environment, production
+    registration, and an executed NHSD Agreement (~8 steps, ~3 months).
+  request_url: https://healthdirect-serviceline.atlassian.net/servicedesk/customer/portal/3/group/12/create/44

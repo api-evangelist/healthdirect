@@ -1,0 +1,40 @@
+generated: '2026-07-24'
+method: searched
+source: https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/standards
+note: >-
+  Standards the NHSD FHIR surface conforms to, per the NHSD Integration Hub
+  standards page and the HL7 AU Provider Directory (AU-PD) implementation guide.
+standards:
+- id: hl7-fhir-r4
+  conforms: true
+  evidence: HL7 FHIR R4 (4.0.1) RESTful API; resources Organization, HealthcareService, PractitionerRole, Practitioner.
+- id: hl7-au-base
+  conforms: true
+  evidence: Built on the HL7 AU Base profiles.
+- id: hl7-au-provider-directory
+  conforms: true
+  evidence: Aligned to HL7 AU Provider Directory (AU-PD / hl7.org.au/fhir/pd/pd2) implementation guide.
+- id: snomed-ct-au
+  conforms: true
+  evidence: Service-type and clinical taxonomies use SNOMED CT-AU code systems.
+- id: g-naf
+  conforms: true
+  evidence: Addresses geocoded against the Geoscape G-NAF national address file.
+- id: oauth2
+  conforms: true
+  evidence: OAuth 2.0 client_credentials token issuance (IAM token endpoint) + x-api-key.
+- id: smart-on-fhir
+  conforms: false
+  evidence: No SMART-on-FHIR .well-known/smart-configuration or patient/system scopes; system-to-system directory API.
+- id: us-core
+  conforms: false
+- id: au-ism
+  conforms: true
+  evidence: Secured to the Australian Government Information Security Manual (ISM).
+- id: acsc-essential-eight
+  conforms: true
+  evidence: Aligned to the ACSC Essential Eight mitigation strategies.
+compliance_program:
+  published: true
+  frameworks: [Australian Government ISM, ACSC Essential Eight]
+  url: https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/standards

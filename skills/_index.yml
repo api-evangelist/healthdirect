@@ -1,0 +1,12 @@
+generated: '2026-07-24'
+method: generated
+source: collections/nhsd-developers-portal.postman_collection.json
+skills:
+- file: healthdirect-find-services-near-location.md
+  name: Find health services near a location
+  api: NHSD FHIR API
+  operations: [tokenRequest, searchHealthcareService]
+- file: healthdirect-lookup-practitioner.md
+  name: Look up a practitioner or organisation by identifier
+  api: NHSD FHIR API
+  operations: [tokenRequest, searchPractitioner, searchPractitionerRole, searchOrganization]

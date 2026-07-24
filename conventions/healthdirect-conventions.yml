@@ -1,0 +1,51 @@
+generated: '2026-07-24'
+method: searched
+source: >-
+  collections/nhsd-developers-portal.postman_collection.json + HL7 AU Provider
+  Directory (AU-PD) implementation guide + FHIR R4 (4.0.1) base semantics
+docs: https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/standards
+api_style: HL7 FHIR R4 (4.0.1) RESTful, read-only provider directory
+base_url:
+  production: https://api.fhir.nhsd.healthdirect.org.au/v4
+  test: https://api.fhir.int.nhsd.healthdirect.org.au/v4
+authentication:
+  style: OAuth 2.0 client_credentials bearer token + x-api-key header
+  ref: authentication/healthdirect-authentication.yml
+content_type:
+  request: application/x-www-form-urlencoded (token) ; none (GET queries)
+  response: application/fhir+json
+versioning:
+  scheme: uri-path
+  current: v4
+  fhir_version: 4.0.1 (R4)
+  note: IG version v4.0.1 (AU NHSD PD, Outbound + Inbound).
+pagination:
+  style: fhir-bundle
+  note: >-
+    Searches return a FHIR searchset Bundle; paging follows the standard FHIR
+    Bundle.link relations (self / next / previous). Related resources are pulled
+    in with the _include parameter (e.g. _include=HealthcareService:location).
+search_semantics:
+  chained_params: true
+  examples: [location.address-city, location.address-postalcode, location.address-state, location.physicalType]
+  geospatial: 'location.near=<lat>:<lng> with optional location.near-distance=<n>|http://unitsofmeasure.org|m'
+  token_params: 'system|code form, e.g. service-type=nhsd:/reference/taxonomies/snomed-servicetype|788007007'
+  temporal: [openNow, openIn (minutes), openAt (ISO-8601)]
+  or_logic: comma-separated values in a single token parameter
+idempotency:
+  supported: false
+  note: >-
+    Read-only API (GET only across Organization, HealthcareService,
+    PractitionerRole, Practitioner). No state-changing operations on the outbound
+    surface, so no idempotency-key contract applies. (The separate Ingestion /
+    Data Acquisition Hub is a gated inbound interface not covered by the public
+    Postman collection.)
+error_envelope:
+  format: FHIR OperationOutcome (application/fhir+json)
+  ref: errors/healthdirect-problem-types.yml
+rate_limiting:
+  documented: false
+sla:
+  uptime_target: '99%'
+  source: NHSD Booking Provider Integration Solution Overview
+lifecycle_ref: lifecycle/healthdirect-lifecycle.yml

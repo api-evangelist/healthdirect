@@ -32,7 +32,7 @@ tags:
 - Digital Health
 - Appointments
 created: '2026-07-24'
-modified: '2026-07-24'
+modified: '2026-07-24T18:00:00Z'
 specificationVersion: '0.19'
 apis:
 - aid: healthdirect:nhsd-fhir-api
@@ -45,7 +45,7 @@ apis:
     (SNOMED CT-AU), and identifier searches — for over 400,000 service and practitioner
     records. Secured with OAuth 2.0 client-credentials plus an x-api-key header.
   humanURL: https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/documentation
-  baseURL: https://api.fhir.int.nhsd.healthdirect.org.au/v4
+  baseURL: https://api.fhir.nhsd.healthdirect.org.au/v4
   tags:
   - FHIR
   - Provider Directory
@@ -126,6 +126,10 @@ maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 common:
+- type: VulnerabilityDisclosure
+  url: security/healthdirect-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/healthdirect-domain-security.yml
 - type: Website
   url: https://about.healthdirect.gov.au/
 - type: ConsumerWebsite
@@ -152,3 +156,33 @@ common:
   url: https://about.healthdirect.gov.au/privacy-policy
 - type: PostmanCollection
   url: collections/nhsd-developers-portal.postman_collection.json
+- type: Security
+  url: https://www.healthdirect.gov.au/.well-known/security.txt
+- type: SecurityTxt
+  url: well-known/healthdirect-security.txt
+- type: WellKnown
+  url: well-known/healthdirect-well-known.yml
+- type: Authentication
+  url: authentication/healthdirect-authentication.yml
+- type: ErrorCatalog
+  url: errors/healthdirect-problem-types.yml
+- type: Conventions
+  url: conventions/healthdirect-conventions.yml
+- type: Lifecycle
+  url: lifecycle/healthdirect-lifecycle.yml
+- type: Conformance
+  url: conformance/healthdirect-conformance.yml
+- type: Compliance
+  url: https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/standards
+- type: DataModel
+  url: data-model/healthdirect-data-model.yml
+- type: Sandbox
+  url: sandbox/healthdirect-sandbox.yml
+- type: Components
+  url: components/healthdirect-components.yml
+- type: MCPServer
+  url: mcp/healthdirect-mcp.yml
+- type: LLMsTxt
+  url: llms/healthdirect-llms.txt
+- type: AgentSkill
+  url: skills/_index.yml

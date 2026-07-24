@@ -1,0 +1,53 @@
+generated: '2026-07-24'
+method: derived
+status: candidate
+source: collections/nhsd-developers-portal.postman_collection.json
+note: >-
+  No official hosted MCP server is published by Healthdirect/NHSD. This is a
+  CANDIDATE tool list derived from the real, documented operations in the
+  official NHSD Postman collection — a starting point for an agent-facing wrapper
+  over the read-only FHIR provider directory, not a live endpoint. Every tool
+  maps to a genuine, verified request in the collection; inputs mirror the FHIR
+  search parameters. Auth (OAuth 2.0 client_credentials + x-api-key) and NHSD
+  onboarding would gate any real deployment.
+server:
+  name: healthdirect-nhsd
+  transport: http
+  url: null
+  auth: oauth2 client_credentials + x-api-key
+tools:
+- name: get_organization
+  description: Fetch a health organisation by NHSD id.
+  source_operation: 'Organization/:id (GET)'
+  inputs: [id]
+- name: search_organizations
+  description: Search organisations by name, identifier, or parent organisation.
+  source_operation: 'Organization?name|identifier|partof (GET)'
+  inputs: [name, identifier, partof]
+- name: get_healthcare_service
+  description: Fetch a healthcare service by NHSD id.
+  source_operation: 'HealthcareService/:id (GET)'
+  inputs: [id]
+- name: search_healthcare_services
+  description: >-
+    Search healthcare services by service type (SNOMED CT-AU), billing option,
+    open-now/open-in/open-at, characteristic, identifier, and location (suburb,
+    postcode, state, proximity, coverage area).
+  source_operation: 'HealthcareService?... (GET)'
+  inputs: [service-type, serviceProvisionCode, openNow, openIn, openAt, characteristic, identifier, location.address-city, location.address-postalcode, location.address-state, location.near, location.near-distance, coverageArea.address-postalcode]
+- name: get_practitioner_role
+  description: Fetch a practitioner role by NHSD id.
+  source_operation: 'PractitionerRole/:id (GET)'
+  inputs: [id]
+- name: search_practitioner_roles
+  description: Search practitioner roles by identifier (e.g. Medicare provider number).
+  source_operation: 'PractitionerRole?identifier (GET)'
+  inputs: [identifier]
+- name: get_practitioner
+  description: Fetch a practitioner by NHSD id.
+  source_operation: 'Practitioner/:id (GET)'
+  inputs: [id]
+- name: search_practitioners
+  description: Search practitioners by name or identifier (e.g. AHPRA registration number).
+  source_operation: 'Practitioner?name|identifier (GET)'
+  inputs: [name, identifier]

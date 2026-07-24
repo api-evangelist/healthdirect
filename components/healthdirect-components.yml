@@ -1,0 +1,18 @@
+generated: '2026-07-24'
+method: searched
+source: >-
+  https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/documentation
+  + https://media.healthdirect.org.au/publications/NHSD_widget-implementation-guide.pdf
+note: >-
+  Distinct from server-side SDKs — an embeddable, hosted UI component third
+  parties drop into websites and mobile apps.
+components:
+- family: NHSD Search Widget
+  name: NHSD Search Widget
+  kind: embeddable-search
+  description: >-
+    Responsive, embeddable search component that lets consumers find health
+    services and practitioners on a third-party website or app, backed by the
+    National Health Services Directory. Configurable and hosted by Healthdirect.
+  loader: https://widget.nhsd.healthdirect.org.au/v1/widget/search
+  implementation_guide: https://media.healthdirect.org.au/publications/NHSD_widget-implementation-guide.pdf

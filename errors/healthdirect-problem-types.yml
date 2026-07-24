@@ -1,0 +1,33 @@
+generated: '2026-07-24'
+method: derived
+source: collections/nhsd-developers-portal.postman_collection.json (collection-level test script)
+format: fhir-operationoutcome
+envelope: >-
+  HL7 FHIR errors are returned as an OperationOutcome resource
+  (application/fhir+json) carrying issue[].severity, issue[].code, and
+  issue[].diagnostics. HTTP status codes below are documented verbatim in the
+  official NHSD Postman collection's response handler.
+problems:
+- status: 200
+  title: OK
+  meaning: Request succeeded; a FHIR resource or searchset Bundle is returned.
+- status: 400
+  title: Bad Request
+  meaning: Malformed request or invalid search parameters.
+  remediation: Review your inputs and try again.
+- status: 401
+  title: Unauthorized
+  meaning: Missing or expired OAuth 2.0 security token.
+  remediation: Generate a new access token via the client_credentials token request (1.1 - Authorization).
+- status: 403
+  title: Forbidden
+  meaning: Incorrect credentials (client_id/client_secret/x-api-key), or CloudFront geo-restriction outside Australia.
+  remediation: Update credentials in environment variables and regenerate the security token.
+- status: 404
+  title: Not Found
+  meaning: No records match the search criteria.
+  remediation: Retry with different criteria; if a record is expected, contact the NHSD.
+- status: 500
+  title: Internal Server Error
+  meaning: Server-side error handling the request.
+  remediation: Retry; if it persists, contact the NHSD with the details of the call made.

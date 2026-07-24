@@ -1,0 +1,32 @@
+generated: '2026-07-24'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: about.healthdirect.gov.au
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Dec 30 23:59:59 2026 GMT
+  hsts: null
+- host: api.fhir.int.nhsd.healthdirect.org.au
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Dec  7 23:59:59 2026 GMT
+  hsts: null
+- host: build.fhir.nhsd.healthdirect.org.au
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Jan  5 23:59:59 2027 GMT
+  hsts: null
+domains:
+- domain: healthdirect.gov.au
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: reject
+- domain: healthdirect.org.au
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: reject

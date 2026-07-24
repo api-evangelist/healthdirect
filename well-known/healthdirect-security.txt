@@ -1,0 +1,9 @@
+# Security Policy for Healthdirect Australia
+# https://www.healthdirect.gov.au
+#
+# This file follows the security.txt standard (RFC 9116).
+# It should be placed at: https://www.healthdirect.gov.au/.well-known/security.txt
+Contact: mailto:security@healthdirect.org.au
+Preferred-Languages: en
+Canonical: https://www.healthdirect.gov.au/.well-known/security.txt
+Expires: 2027-06-30T23:59:59Z

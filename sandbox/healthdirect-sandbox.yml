@@ -1,0 +1,38 @@
+generated: '2026-07-24'
+method: searched
+source: collections/nhsd-developers-portal.postman_collection.json
+note: >-
+  NHSD provides an Integrator Test Environment, provisioned during onboarding.
+  The official NHSD "01 - Developers Portal" Postman collection ships against the
+  test base URL below and embeds real published test-record identifiers. Client
+  credentials (client_id, client_secret) and the x-api-key are issued per
+  integrator during onboarding and are NOT published — leave them blank in the
+  collection variables. No test values were invented; all are verbatim from the
+  official collection.
+environments:
+  test:
+    base_url: https://api.fhir.int.nhsd.healthdirect.org.au/v4
+    token_url: https://iam.int.nhsd.healthdirect.org.au/iam/oauth/token
+    note: '"int" in the host denotes the Integrator Test Environment.'
+  production:
+    base_url: https://api.fhir.nhsd.healthdirect.org.au/v4
+credentials:
+  supplied_via: NHSD onboarding (Integrator Test Environment registration)
+  collection_variables: [client_id, client_secret, apiKey]
+  published: false
+test_records:
+  organization_id: 0cbe6074-9f28-4494-8a11-dd9777306ab8
+  organization_name: 786 Test Medical Centre
+  organization_abn: '70442033624'
+  organization_partof_id: 6857a815-7e2b-496d-848f-06dd11694097
+  healthcare_service_id: 10d6717a-a225-4ae5-8f4c-590118ca018f
+  practitioner_role_id: b60a7a44-3db7-42c0-81bc-acc483bc29f2
+  practitioner_id: 390d88a5-79b3-4228-86dd-bc272bd5e8bb
+  practitioner_name: Audrey Josephine Hayes
+  practitioner_ahpra_number: MED0000991161
+  practitioner_medicare_provider_number: 034238AJ
+  healthlink_service_identifier: eve42514
+  proximity_coordinate: '-27.4237155914306641:153.035675048828125'
+  sample_postcode: '3585'
+  sample_suburb: BENDIGO
+  sample_state: VIC
