@@ -1,0 +1,150 @@
+aid: healthdirect
+name: Healthdirect Australia
+review:
+  question: >-
+    Does Healthdirect Australia operate a real, documented public API surface, and
+    what is its FHIR / spec / auth posture?
+  answer: true
+  date: '2026-07-24'
+  reviewer: API Evangelist
+  homeMarket: Australia
+findings:
+  summary: |
+    Healthdirect Australia is a national, government-owned, not-for-profit
+    operator of core Australian digital-health infrastructure. Its developer
+    surface is the National Health Services Directory (NHSD) Developer and
+    Integration Hub, which exposes standards-based HL7 FHIR APIs over an
+    authoritative directory of 400,000+ health service and practitioner records.
+    The NHSD ships three FHIR-based products (real-time FHIR API, FHIR Bulk Data
+    Export, and a FHIR Ingestion / Data Acquisition Hub), plus an embeddable
+    search widget and a Provider Appointments API surfacing certified booking
+    platforms. The FHIR API is aligned to the HL7 AU Provider Directory (AU-PD)
+    implementation guide and returns AU-PD resources (Organization,
+    HealthcareService, PractitionerRole, Practitioner). Onboarding is gated behind
+    a formal registration + test-environment process (not self-serve).
+  developerPortal:
+    url: https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub
+    httpStatus: 200
+    confirmed: true
+  fhirCapabilityStatement:
+    captured: false
+    reason: >-
+      The NHSD FHIR Implementation Guide is published at
+      https://build.fhir.nhsd.healthdirect.org.au (v4 IG, aligned to HL7 AU-PD),
+      which would host the CapabilityStatement, but the CloudFront distribution
+      geo-blocks requests from outside Australia (HTTP 403 "configured to block
+      access from your country"), so no CapabilityStatement/metadata JSON could
+      be fetched and saved verbatim from this location.
+    fhirVersion: R4 (per HL7 AU-PD alignment; not independently confirmed via metadata)
+    resourcesObserved:
+      - Organization
+      - HealthcareService
+      - PractitionerRole
+      - Practitioner
+  smartConfiguration:
+    captured: false
+    note: >-
+      No public SMART-on-FHIR .well-known/smart-configuration was reachable; the
+      FHIR host is geo-restricted and integration is gated behind registration.
+  downloadableSpecs:
+    count: 1
+    specs:
+      - type: PostmanCollection
+        path: collections/nhsd-developers-portal.postman_collection.json
+        schema: https://schema.getpostman.com/json/collection/v2.1.0/collection.json
+        provenance: https://media.healthdirect.org.au/publications/NHSD_developers-portal-postman-collection.zip
+        httpStatus: 200
+        note: >-
+          Official NHSD "01 - Developers Portal" Postman collection (v2.1.0),
+          downloaded from the media host (HTTP 200, application/zip 44,698 bytes),
+          extracted and saved verbatim. Documents the OAuth2 token request and
+          real FHIR AU-PD queries against the integrator test base URL
+          https://api.fhir.int.nhsd.healthdirect.org.au/v4.
+    openapiHarvested: false
+    openapiNote: >-
+      No downloadable OpenAPI/Swagger document is published; the machine-readable
+      contract is the FHIR Implementation Guide (geo-blocked) plus the Postman
+      collection harvested here.
+  authModel:
+    scheme: OAuth 2.0 client-credentials + API key
+    tokenEndpoint: https://iam.int.nhsd.healthdirect.org.au/iam/oauth/token
+    grantType: client_credentials
+    apiKeyHeader: x-api-key
+    smartOnFhir: false
+    scopesObserved: []
+    note: >-
+      Confirmed from the official Postman collection: a client_credentials POST to
+      the IAM token endpoint (client_id + client_secret) plus an x-api-key header
+      on requests. No SMART-on-FHIR patient/*.read or system/*.rw scopes are
+      documented; this is a system-to-system provider-directory API, not a
+      patient-record SMART app surface.
+  standardsConformance:
+    fhirImplementationGuide: HL7 AU Provider Directory (AU-PD / hl7.org.au/fhir/pd/pd2)
+    terminology: SNOMED CT-AU
+    addressing: G-NAF (Geoscape geocoded national address file)
+    security: Australian ISM + Essential Eight, OAuth 2.0
+    usCore: false
+    ukCore: false
+    auCore: false
+    auBase: aligned via HL7 AU-PD (built on AU Base)
+    daVinci: false
+    carin: false
+  accessPosture:
+    selfServe: false
+    gated: true
+    note: >-
+      Public NHSD data is provided free of charge, but API integration requires
+      submitting a connection request for the Integrator Test Environment,
+      completing production registration, and executing an NHSD Agreement — an
+      ~8-step, ~3-month onboarding. An honest gated finding.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://api.fhir.int.nhsd.healthdirect.org.au/v4
+      documented: true
+      note: HL7 FHIR R4 REST (integrator test environment base per official Postman collection).
+    - protocol: OAuth2 Token
+      scheme: https
+      baseURL: https://iam.int.nhsd.healthdirect.org.au/iam/oauth/token
+      documented: true
+      note: client_credentials token issuance.
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No WebSocket/streaming surface documented; FHIR bulk export is asynchronous batch, not streaming.
+sources:
+  - url: https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub
+    type: DeveloperPortal
+    httpStatus: 200
+    note: NHSD Developer and Integration Hub landing.
+  - url: https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/documentation
+    type: Documentation
+    httpStatus: 200
+    note: Lists the three FHIR products, widget, Provider Appointments API, developer guide, and Postman collection.
+  - url: https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/standards
+    type: Documentation
+    httpStatus: 200
+    note: Standards adopted — FHIR AU-PD, SNOMED CT-AU, G-NAF, OAuth 2.0, ISM, Essential Eight.
+  - url: https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/getting-started
+    type: GettingStarted
+    httpStatus: 200
+    note: Gated 8-step onboarding via Integrator Test Environment registration.
+  - url: https://media.healthdirect.org.au/publications/NHSD_developers-portal-postman-collection.zip
+    type: PostmanCollection
+    httpStatus: 200
+    note: Official Postman collection, harvested verbatim to collections/.
+  - url: https://build.fhir.nhsd.healthdirect.org.au/v4/index.html
+    type: APIReference
+    httpStatus: 403
+    note: FHIR v4 Implementation Guide — geo-blocked (CloudFront blocks non-Australia countries).
+actions:
+  apisYmlUpdated: true
+  specsHarvested: 1
+  reason: >-
+    Confirmed a real national-health FHIR developer surface. Harvested the one
+    reachable machine-readable contract (the official NHSD Postman collection)
+    verbatim. The FHIR CapabilityStatement lives in a geo-blocked IG and could not
+    be captured from outside Australia; recorded honestly with HTTP statuses.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

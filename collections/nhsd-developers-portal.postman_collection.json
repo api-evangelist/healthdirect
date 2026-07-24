@@ -1,0 +1,1799 @@
+{
+	"info": {
+		"_postman_id": "368cf204-362a-49af-9c76-118a80499c22",
+		"name": "01 - Developers Portal",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11415471",
+		"_collection_link": "https://gold-water-608612.postman.co/workspace/FHIR---Developers-Portal~a5eac805-93ee-4d1b-a8d8-96b2fee4a02f/collection/11415471-368cf204-362a-49af-9c76-118a80499c22?action=share&source=collection_link&creator=11415471"
+	},
+	"item": [
+		{
+			"name": "1.0 - IAM",
+			"item": [
+				{
+					"name": "1.1 - Authorisation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Correctly returned an access token\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.haveOwnProperty(\"accessToken\");",
+									"",
+									"    token = responseJson.accessToken",
+									"    pm.collectionVariables.set(\"token\", \"Bearer \" + token);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{client_secret}}",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{client_id}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://iam.int.nhsd.healthdirect.org.au/iam/oauth/token",
+							"protocol": "https",
+							"host": [
+								"iam",
+								"int",
+								"nhsd",
+								"healthdirect",
+								"org",
+								"au"
+							],
+							"path": [
+								"iam",
+								"oauth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2.0 - Organization",
+			"item": [
+				{
+					"name": "2.1 - Get by NHSD ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Correct entity returned\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    var id = pm.request.url.path[2]",
+									"",
+									"    pm.expect(responseJson.id).to.eql(id);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/Organization/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Organization",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "0cbe6074-9f28-4494-8a11-dd9777306ab8"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2.2 - Search by organisation name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check name matches\", function () {",
+									"    const responseJson = pm.response.json();",
+									"",
+									"    var name = decodeURI(pm.request.url.query.get('name'))",
+									"",
+									"    var entities = responseJson.entry;",
+									"    for(entity of entities){",
+									"        pm.expect(entity.resource.name).to.eql(name);",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/Organization?name=786 Test Medical Centre",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Organization"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "786 Test Medical Centre"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2.3 - Search by organisation identifier",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check identifier matches\", function () {",
+									"    var startUri = 'nhsd:/reference/common/organisationIdentifierType/'",
+									"",
+									"    const responseJson = pm.response.json();",
+									"",
+									"    var value = decodeURI(pm.request.url.query.get('identifier'))",
+									"",
+									"    var entities = responseJson.entry;",
+									"    for(entity of entities){",
+									"        var valuesArray = [];",
+									"",
+									"        var identifiers = entity.resource.identifier",
+									"        for(identifier of identifiers){",
+									"            var code = identifier.type.coding[0].code.toLowerCase()",
+									"            var resValue = identifier.value",
+									"            valuesArray.push(startUri + code + \"|\" + resValue);",
+									"        }",
+									"",
+									"        pm.expect(valuesArray).includes(value);",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/Organization?identifier=nhsd:/reference/common/organisationIdentifierType/abn|70442033624",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Organization"
+							],
+							"query": [
+								{
+									"key": "identifier",
+									"value": "nhsd:/reference/common/organisationIdentifierType/abn|70442033624"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2.4 - Search by related organisation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check related organisation matches\", function () {",
+									"    const responseJson = pm.response.json();",
+									"",
+									"    var value = decodeURI(pm.request.url.query.get('partof'))",
+									"",
+									"    var entities = responseJson.entry;",
+									"    for(entity of entities){",
+									"        var id = entity.resource.partOf.id",
+									"        pm.expect(id).to.eql(value);",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/Organization?partof=6857a815-7e2b-496d-848f-06dd11694097",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Organization"
+							],
+							"query": [
+								{
+									"key": "partof",
+									"value": "6857a815-7e2b-496d-848f-06dd11694097"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "3.0 - Healthcare Service",
+			"item": [
+				{
+					"name": "3.1 - Get by NHSD ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Correct entity based on id search returned\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    var id = pm.request.url.path[2]",
+									"",
+									"    pm.expect(responseJson.id).to.eql(id);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/HealthcareService/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"HealthcareService",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "10d6717a-a225-4ae5-8f4c-590118ca018f"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3.2 - Search by service type",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check service type matches\", function () {",
+									"    const responseJson = pm.response.json();",
+									"",
+									"    var reqValue = decodeURI(pm.request.url.query.get('service-type')).toLowerCase().split(\"|\")[1]",
+									"",
+									"    var entities = responseJson.entry;",
+									"    for(entity of entities){",
+									"        var respValues = [];",
+									"",
+									"        var items = entity.resource.type",
+									"        for(item of items){",
+									"            var respValue = item.coding[0].code.toLowerCase()",
+									"            respValues.push(respValue);",
+									"        }",
+									"",
+									"        pm.expect(respValues).includes(reqValue);",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/HealthcareService?service-type=nhsd:/reference/taxonomies/snomed-servicetype|788007007",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"HealthcareService"
+							],
+							"query": [
+								{
+									"key": "service-type",
+									"value": "nhsd:/reference/taxonomies/snomed-servicetype|788007007"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3.3 - Search by multiple service types (OR)",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check multiple service types match (OR)\", function () {",
+									"    const responseJson = pm.response.json();",
+									"",
+									"    var tempArray = decodeURI(pm.request.url.query.get('service-type')).toLowerCase().split(',')",
+									"",
+									"    var reqValues = [];",
+									"    for(item of tempArray){",
+									"        reqValues.push(item.split('|')[1])",
+									"    }",
+									"    ",
+									"    var entities = responseJson.entry;",
+									"    for(entity of entities){",
+									"        var respValues = [];",
+									"",
+									"        var items = entity.resource.type",
+									"        for(item of items){",
+									"            var respValue = item.coding[0].code.toLowerCase()",
+									"            respValues.push(respValue);",
+									"        }",
+									"",
+									"        pm.expect(respValues).includes.oneOf(reqValues);",
+									"    }",
+									"",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/HealthcareService?service-type=nhsd:/reference/taxonomies/snomed-servicetype|1238861000168104,nhsd:/reference/taxonomies/snomed-servicetype|1241801000168105",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"HealthcareService"
+							],
+							"query": [
+								{
+									"key": "service-type",
+									"value": "nhsd:/reference/taxonomies/snomed-servicetype|1238861000168104,nhsd:/reference/taxonomies/snomed-servicetype|1241801000168105"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3.4 - Search by billing option",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check billing option matches\", function () {",
+									"    const responseJson = pm.response.json();",
+									"",
+									"    var reqValue = decodeURI(pm.request.url.query.get('serviceProvisionCode')).toLowerCase().split(\"|\")[1]",
+									"",
+									"    var entities = responseJson.entry;",
+									"    for(entity of entities){",
+									"        var respValues = [];",
+									"",
+									"        var items = entity.resource.serviceProvisionCode",
+									"        for(item of items){",
+									"            var respValue = item.coding[0].code.toLowerCase()",
+									"            respValues.push(respValue);",
+									"        }",
+									"",
+									"        pm.expect(respValues).includes(reqValue);",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/HealthcareService?serviceProvisionCode=http://hl7.org.au/fhir/CodeSystem/service-provision-conditions|BBO",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"HealthcareService"
+							],
+							"query": [
+								{
+									"key": "serviceProvisionCode",
+									"value": "http://hl7.org.au/fhir/CodeSystem/service-provision-conditions|BBO"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3.5 - Search by open now",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check if open now\", function () {",
+									"    const responseJson = pm.response.json();",
+									"",
+									"    var reqValue = decodeURI(pm.request.url.query.get('openNow')).toLowerCase()",
+									"",
+									"    if(reqValue == \"true\"){",
+									"        reqValue = \"current-status|open\"",
+									"    }else{",
+									"        reqValue = \"current-status|closed\"",
+									"    }",
+									"",
+									"    var entities = responseJson.entry;",
+									"    for(entity of entities){",
+									"        var respValues = [];",
+									"",
+									"        var items = entity.resource.meta.extension",
+									"        for(item of items){",
+									"            var system = item.extension[0].url.toLowerCase()",
+									"            var code = item.extension[0].valueString.toLowerCase()",
+									"            ",
+									"            respValues.push(system + \"|\" + code);",
+									"        }",
+									"",
+									"        pm.expect(respValues).includes(reqValue);",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/HealthcareService?openNow=true",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"HealthcareService"
+							],
+							"query": [
+								{
+									"key": "openNow",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3.6 - Search by open in",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/HealthcareService?openIn=30",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"HealthcareService"
+							],
+							"query": [
+								{
+									"key": "openIn",
+									"value": "30"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3.7 - Search by open at",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/HealthcareService?openAt=2024-12-25T13:47:43.000+10:00",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"HealthcareService"
+							],
+							"query": [
+								{
+									"key": "openAt",
+									"value": "2024-12-25T13:47:43.000+10:00"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3.8 - Search by characteristic",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check characteristics match\", function () {",
+									"    const responseJson = pm.response.json();",
+									"",
+									"    var reqValue = decodeURI(pm.request.url.query.get('characteristic')).toLowerCase().split(\"|\")[1]",
+									"",
+									"    var entities = responseJson.entry;",
+									"    for(entity of entities){",
+									"        var respValues = [];",
+									"",
+									"        var items = entity.resource.characteristic",
+									"        for(item of items){",
+									"            var respValue = item.coding[0].code.toLowerCase()",
+									"            respValues.push(respValue);",
+									"        }",
+									"",
+									"        pm.expect(respValues).includes(reqValue);",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/HealthcareService?characteristic=http://fhir.nhsd.com.au/CodeSystem/rc-facility|wheelchairAccess",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"HealthcareService"
+							],
+							"query": [
+								{
+									"key": "characteristic",
+									"value": "http://fhir.nhsd.com.au/CodeSystem/rc-facility|wheelchairAccess"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3.9 - Search by identifier",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check identifiers match\", function () {",
+									"    const responseJson = pm.response.json();",
+									"",
+									"    var reqValue = decodeURI(pm.request.url.query.get('identifier')).toLowerCase().split(\"|\")[1]",
+									"",
+									"    var entities = responseJson.entry;",
+									"    for(entity of entities){",
+									"        var respValues = [];",
+									"",
+									"        var items = entity.resource.identifier",
+									"        for(item of items){",
+									"            var respValue = item.value.toLowerCase()",
+									"            ",
+									"            respValues.push(respValue);",
+									"        }",
+									"",
+									"        pm.expect(respValues).includes(reqValue);",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/HealthcareService?identifier=nhsd:/reference/common/providerLocationServiceIdentifierType/healthLink|eve42514",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"HealthcareService"
+							],
+							"query": [
+								{
+									"key": "identifier",
+									"value": "nhsd:/reference/common/providerLocationServiceIdentifierType/healthLink|eve42514"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3.10 - Search by location suburb",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check suburb location search\", function () {",
+									"    const responseJson = pm.response.json();",
+									"",
+									"    var reqValue = decodeURI(pm.request.url.query.get('location.address-city')).toLowerCase()",
+									"",
+									"    var entities = responseJson.entry;",
+									"    for(entity of entities){",
+									"        var resource = entity.resource.resourceType",
+									"        if(resource === \"HealthcareService\"){",
+									"            var locId = entity.resource.location[0].id",
+									"            var location = entities.filter(item => item.resource.id === locId);",
+									"            var suburb = location[0].resource.address.city.toLowerCase();",
+									"            pm.expect(reqValue).to.equal(suburb);",
+									"        }",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/HealthcareService?location.physicalType=si&location.address-city=BENDIGO&_include=HealthcareService:location",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"HealthcareService"
+							],
+							"query": [
+								{
+									"key": "location.physicalType",
+									"value": "si"
+								},
+								{
+									"key": "location.address-city",
+									"value": "BENDIGO"
+								},
+								{
+									"key": "_include",
+									"value": "HealthcareService:location"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3.11 - Search by location postcode",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check postcode location search\", function () {",
+									"    const responseJson = pm.response.json();",
+									"",
+									"    var reqValue = decodeURI(pm.request.url.query.get('location.address-postalcode')).toLowerCase()",
+									"",
+									"    var entities = responseJson.entry;",
+									"    for(entity of entities){",
+									"        var resource = entity.resource.resourceType",
+									"        if(resource === \"HealthcareService\"){",
+									"            var locId = entity.resource.location[0].id",
+									"            var location = entities.filter(item => item.resource.id === locId);",
+									"            var postcode = location[0].resource.address.postalCode.toLowerCase();",
+									"            pm.expect(reqValue).to.equal(postcode);",
+									"        }",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/HealthcareService?location.physicalType=si&location.address-postalcode=3585&_include=HealthcareService:location",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"HealthcareService"
+							],
+							"query": [
+								{
+									"key": "location.physicalType",
+									"value": "si"
+								},
+								{
+									"key": "location.address-postalcode",
+									"value": "3585"
+								},
+								{
+									"key": "_include",
+									"value": "HealthcareService:location"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3.12 - Search by location state",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check state location search\", function () {",
+									"    const responseJson = pm.response.json();",
+									"",
+									"    var reqValue = decodeURI(pm.request.url.query.get('location.address-state')).toLowerCase()",
+									"",
+									"    var entities = responseJson.entry;",
+									"    for(entity of entities){",
+									"        var resource = entity.resource.resourceType",
+									"        if(resource === \"HealthcareService\"){",
+									"            var locId = entity.resource.location[0].id",
+									"            var location = entities.filter(item => item.resource.id === locId);",
+									"            var state = location[0].resource.address.state.toLowerCase();",
+									"            pm.expect(reqValue).to.equal(state);",
+									"        }",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/HealthcareService?location.physicalType=si&location.address-state=VIC&_include=HealthcareService:location",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"HealthcareService"
+							],
+							"query": [
+								{
+									"key": "location.physicalType",
+									"value": "si"
+								},
+								{
+									"key": "location.address-state",
+									"value": "VIC"
+								},
+								{
+									"key": "_include",
+									"value": "HealthcareService:location"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3.13 - Search by location proximity",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check proximity search\", function () {",
+									"    const responseJson = pm.response.json();",
+									"",
+									"    var distance = 0.0;",
+									"    var distanceUrl = \"http://fhir.nhsd.com.au/StructureDefinition/proximity-distance\";",
+									"    var entities = responseJson.entry;",
+									"    ",
+									"    for(entity of entities){",
+									"        var items = entity.resource.meta.extension;",
+									"        var item = items.filter(item => item.url === distanceUrl);",
+									"        var value = item[0].valueQuantity.value;",
+									"",
+									"        pm.expect(distance).lte(value);",
+									"        distance = value",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/HealthcareService?location.physicalType=si&location.near=-27.4237155914306641:153.035675048828125",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"HealthcareService"
+							],
+							"query": [
+								{
+									"key": "location.physicalType",
+									"value": "si"
+								},
+								{
+									"key": "location.near",
+									"value": "-27.4237155914306641:153.035675048828125"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3.14 - Search by location proximity within a specified distance",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check proximity search and distance limit\", function () {",
+									"    const responseJson = pm.response.json();",
+									"",
+									"    var reqValue = Number(decodeURI(pm.request.url.query.get('location.near-distance')).toLowerCase().split(\"|\")[0])",
+									"",
+									"    var distance = 0.0;",
+									"    var distanceUrl = \"http://fhir.nhsd.com.au/StructureDefinition/proximity-distance\";",
+									"    var entities = responseJson.entry;",
+									"    ",
+									"    for(entity of entities){",
+									"        var items = entity.resource.meta.extension;",
+									"        var item = items.filter(item => item.url === distanceUrl);",
+									"        var value = item[0].valueQuantity.value;",
+									"",
+									"        pm.expect(distance).lte(value);",
+									"        pm.expect(distance).lte(reqValue)",
+									"        distance = value",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/HealthcareService?location.physicalType=si&location.near=-27.4237155914306641:153.035675048828125&location.near-distance=100|http://unitsofmeasure.org|m",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"HealthcareService"
+							],
+							"query": [
+								{
+									"key": "location.physicalType",
+									"value": "si"
+								},
+								{
+									"key": "location.near",
+									"value": "-27.4237155914306641:153.035675048828125"
+								},
+								{
+									"key": "location.near-distance",
+									"value": "100|http://unitsofmeasure.org|m"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3.15 - Search by coverage area postcode",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check location search based on coverage area postcode\", function () {",
+									"    const responseJson = pm.response.json();",
+									"",
+									"    var entities = responseJson.entry;",
+									"    for(entity of entities){",
+									"        var item = entity.resource.contained[0].physicalType.coding[0].code;",
+									"        pm.expect(item).to.eql(\"AREA\")",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/HealthcareService?location.physicalType=virtual&coverageArea.address-postalcode=3568",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"HealthcareService"
+							],
+							"query": [
+								{
+									"key": "location.physicalType",
+									"value": "virtual"
+								},
+								{
+									"key": "coverageArea.address-postalcode",
+									"value": "3568"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "4.0 - Practitioner Role",
+			"item": [
+				{
+					"name": "4.1 - Get by NHSD ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Correct entity based on id search returned\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    var id = pm.request.url.path[2]",
+									"",
+									"    pm.expect(responseJson.id).to.eql(id);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/PractitionerRole/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"PractitionerRole",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "b60a7a44-3db7-42c0-81bc-acc483bc29f2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4.2 - Search by identifier",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check identifiers match\", function () {",
+									"    const responseJson = pm.response.json();",
+									"",
+									"    var reqValue = decodeURI(pm.request.url.query.get('identifier')).toLowerCase().split(\"|\")[1]",
+									"",
+									"    var entities = responseJson.entry;",
+									"    for(entity of entities){",
+									"        var respValues = [];",
+									"",
+									"        var items = entity.resource.identifier",
+									"        for(item of items){",
+									"            var respValue = item.value.toLowerCase()",
+									"            ",
+									"            respValues.push(respValue);",
+									"        }",
+									"",
+									"        pm.expect(respValues).includes(reqValue);",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/PractitionerRole?identifier=http://ns.electronichealth.net.au/id/medicare-provider-number|034238AJ",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"PractitionerRole"
+							],
+							"query": [
+								{
+									"key": "identifier",
+									"value": "http://ns.electronichealth.net.au/id/medicare-provider-number|034238AJ"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "5.0 - Practitioner",
+			"item": [
+				{
+					"name": "5.1 - Get by NHSD ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Correct entity based on id search returned\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    var id = pm.request.url.path[2]",
+									"",
+									"    pm.expect(responseJson.id).to.eql(id);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/Practitioner/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Practitioner",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "390d88a5-79b3-4228-86dd-bc272bd5e8bb"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5.2 - Search by name",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check name matches based on token functionality (individuals names, delimited by space)\", function () {",
+									"    const responseJson = pm.response.json();",
+									"",
+									"    var reqValues = decodeURI(pm.request.url.query.get('name')).toLowerCase().split(\" \")",
+									"",
+									"    var entities = responseJson.entry;",
+									"    for(entity of entities){",
+									"        var respValue = entity.resource.name[0].text.toLowerCase()",
+									"",
+									"        pm.expect(respValue).to.contain.oneOf(reqValues);",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/Practitioner?name=Audrey Josephine Hayes",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Practitioner"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Audrey Josephine Hayes"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5.3 - Search by identifier",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check identifiers match\", function () {",
+									"    const responseJson = pm.response.json();",
+									"",
+									"    var reqValue = decodeURI(pm.request.url.query.get('identifier')).toLowerCase().split(\"|\")[1]",
+									"",
+									"    var entities = responseJson.entry;",
+									"    for(entity of entities){",
+									"        var respValues = [];",
+									"",
+									"        var items = entity.resource.identifier",
+									"        for(item of items){",
+									"            var respValue = item.value.toLowerCase()",
+									"            ",
+									"            respValues.push(respValue);",
+									"        }",
+									"",
+									"        pm.expect(respValues).includes(reqValue);",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/Practitioner?identifier=http://hl7.org.au/id/ahpra-registration-number|MED0000991161",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Practitioner"
+							],
+							"query": [
+								{
+									"key": "identifier",
+									"value": "http://hl7.org.au/id/ahpra-registration-number|MED0000991161"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"pm.test(\"Check the response is ok - HTTP status code is 200\", function () {",
+					"    if(pm.response.code === 400){",
+					"        console.log(\"Bad request. Please review you inputs and try again\")",
+					"    }",
+					"    if(pm.response.code === 401){",
+					"        console.log(\"Error is likely due to expired security token. Generate a new security token by running request 1.1 - Authorization\")",
+					"    }",
+					"    if(pm.response.code === 403){",
+					"        console.log(\"The error is likely caused by incorrect credentials. Please update in the evironment variables and generate a new security token by running request 1.1 - Authorization\")",
+					"    }",
+					"    if(pm.response.code === 404){",
+					"        console.log(\"Records not found matching the search criteria. Please try again using different criteria. If you are expecting to have a record returned please contact the NHSD\")",
+					"    }",
+					"    if(pm.response.code === 500){",
+					"        console.log(\"If you continue to see this error. Please contact the NHSD to resolve with the details of the call made\")",
+					"    }",
+					"",
+					"    pm.response.to.have.status(200);",
+					"});"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "https://api.fhir.int.nhsd.healthdirect.org.au/v4",
+			"type": "string"
+		},
+		{
+			"key": "apiKey",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "client_secret",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "client_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

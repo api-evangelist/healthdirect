@@ -1,0 +1,154 @@
+aid: healthdirect
+url: https://raw.githubusercontent.com/api-evangelist/healthdirect/refs/heads/main/apis.yml
+name: Healthdirect Australia
+kind: company
+description: >-
+  Healthdirect Australia is a national, government-owned, not-for-profit organisation
+  that operates core Australian digital-health infrastructure and consumer health
+  services on behalf of the Commonwealth, states, and territories. It runs the free
+  healthdirect symptom checker and health advice service and, most relevant to
+  developers, delivers the National Health Services Directory (NHSD) — the authoritative
+  national directory of health services and practitioners, covering more than 400,000
+  service and practitioner records. Healthdirect exposes the NHSD to government,
+  commercial, and clinical software developers through standards-based HL7 FHIR APIs
+  (aligned to the HL7 AU Provider Directory / AU-PD implementation guide, using SNOMED
+  CT-AU terminology and G-NAF geocoded addresses), a FHIR bulk data export, a FHIR
+  ingestion/data-acquisition hub for contributing sources, an embeddable NHSD search
+  widget, and a Provider Appointments API that surfaces real-time appointment
+  availability from certified booking platforms. Integration is gated behind a formal
+  onboarding and test-environment registration process, and APIs are secured with
+  OAuth 2.0 client-credentials plus an API key. Home market is Australia.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- Healthcare
+- Australia
+- FHIR
+- HL7
+- Interoperability
+- Provider Directory
+- National Health System
+- Health Services Directory
+- Telehealth
+- Digital Health
+- Appointments
+created: '2026-07-24'
+modified: '2026-07-24'
+specificationVersion: '0.19'
+apis:
+- aid: healthdirect:nhsd-fhir-api
+  name: NHSD FHIR API
+  description: >-
+    Real-time, read-only HL7 FHIR API over the National Health Services Directory,
+    aligned to the HL7 AU Provider Directory (AU-PD) implementation guide. Supports
+    querying Organization, HealthcareService, PractitionerRole, and Practitioner
+    resources — including geospatial (location.near), open-now/open-at, service-type
+    (SNOMED CT-AU), and identifier searches — for over 400,000 service and practitioner
+    records. Secured with OAuth 2.0 client-credentials plus an x-api-key header.
+  humanURL: https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/documentation
+  baseURL: https://api.fhir.int.nhsd.healthdirect.org.au/v4
+  tags:
+  - FHIR
+  - Provider Directory
+  - Healthcare
+  properties:
+  - type: Documentation
+    url: https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/documentation
+  - type: APIReference
+    url: https://build.fhir.nhsd.healthdirect.org.au/v4/index.html
+  - type: PostmanCollection
+    url: collections/nhsd-developers-portal.postman_collection.json
+  - type: Documentation
+    url: https://media.healthdirect.org.au/publications/NHSD_Developer-Guide.pdf
+- aid: healthdirect:nhsd-fhir-bulk-data-export
+  name: NHSD FHIR Bulk Data Export
+  description: >-
+    Read-only HL7 FHIR bulk data export for retrieving large NHSD datasets at a
+    specified frequency, for integrators that need the full directory rather than
+    real-time single-record lookups.
+  humanURL: https://build.fhir.nhsd.healthdirect.org.au/v4/bulkexports.html
+  tags:
+  - FHIR
+  - Bulk Data
+  - Provider Directory
+  properties:
+  - type: Documentation
+    url: https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/documentation
+  - type: APIReference
+    url: https://build.fhir.nhsd.healthdirect.org.au/v4/bulkexports.html
+- aid: healthdirect:nhsd-ingestion-hub
+  name: NHSD FHIR Ingestion & Data Acquisition Hub
+  description: >-
+    HL7 FHIR write/inbound interface for approved data-contributing sources to submit
+    and maintain health service and practitioner records in the National Health
+    Services Directory.
+  humanURL: https://build.fhir.nhsd.healthdirect.org.au/ingestion/index.html
+  tags:
+  - FHIR
+  - Ingestion
+  - Provider Directory
+  properties:
+  - type: Documentation
+    url: https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/documentation
+  - type: APIReference
+    url: https://build.fhir.nhsd.healthdirect.org.au/ingestion/index.html
+- aid: healthdirect:nhsd-provider-appointments-api
+  name: NHSD Provider Appointments API
+  description: >-
+    API that surfaces real-time appointment availability and booking integration from
+    certified provider booking platforms (AutoMed, HealthEngine, HotDoc, MedAdvisor,
+    Medi2Apps) within the National Health Services Directory.
+  humanURL: https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/documentation
+  tags:
+  - Appointments
+  - Healthcare
+  - Provider Directory
+  properties:
+  - type: Documentation
+    url: https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/documentation
+  - type: Documentation
+    url: https://media.healthdirect.org.au/publications/NHSD_onboarding-pack_provider-appointments-api.zip
+- aid: healthdirect:nhsd-widget
+  name: NHSD Search Widget
+  description: >-
+    Embeddable, responsive NHSD search component that third parties can deploy on
+    websites and mobile apps to let consumers find health services and practitioners,
+    backed by the National Health Services Directory.
+  humanURL: https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/documentation
+  baseURL: https://widget.nhsd.healthdirect.org.au/v1/widget/search
+  tags:
+  - Widget
+  - Provider Directory
+  - Healthcare
+  properties:
+  - type: Documentation
+    url: https://media.healthdirect.org.au/publications/NHSD_widget-implementation-guide.pdf
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
+common:
+- type: Website
+  url: https://about.healthdirect.gov.au/
+- type: ConsumerWebsite
+  url: https://www.healthdirect.gov.au/
+- type: DeveloperPortal
+  url: https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub
+- type: Documentation
+  url: https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/documentation
+- type: APIReference
+  url: https://build.fhir.nhsd.healthdirect.org.au/v4/index.html
+- type: GettingStarted
+  url: https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/getting-started
+- type: SignUp
+  url: https://healthdirect-serviceline.atlassian.net/servicedesk/customer/portal/3/group/12/create/44
+- type: Support
+  url: https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/technical-support
+- type: Blog
+  url: https://about.healthdirect.gov.au/news
+- type: LinkedIn
+  url: https://www.linkedin.com/company/healthdirect-australia
+- type: TermsOfService
+  url: https://about.healthdirect.gov.au/terms-of-use
+- type: PrivacyPolicy
+  url: https://about.healthdirect.gov.au/privacy-policy
+- type: PostmanCollection
+  url: collections/nhsd-developers-portal.postman_collection.json
