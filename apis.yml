@@ -18,6 +18,17 @@ description: >-
   availability from certified booking platforms. Integration is gated behind a formal
   onboarding and test-environment registration process, and APIs are secured with
   OAuth 2.0 client-credentials plus an API key. Home market is Australia.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 tags:
 - Healthcare
