@@ -141,6 +141,10 @@ apis:
   humanURL: https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/documentation
   baseURL: https://widget.nhsd.healthdirect.org.au/v1/widget/search
   tags:
+  - Widgets
+  - Provider Directory
+  - Healthcare
+  tags_raw:
   - Widget
   - Provider Directory
   - Healthcare
