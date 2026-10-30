@@ -1,4 +1,4 @@
-# Healthdirect Australia (healthdirect)
+# Healthdirect Australia
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,75 +64,105 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Healthdirect Australia is a national, government-owned, not-for-profit organisation that operates core Australian digital-health infrastructure and consumer health services on behalf of the Commonwealth, states, and territories. Its developer surface is the National Health Services Directory (NHSD) — the authoritative national directory of 400,000+ health service and practitioner records — exposed to government, commercial, and clinical software developers through standards-based HL7 FHIR APIs, an embeddable search widget, and a Provider Appointments API.
+Healthdirect Australia is a national, government-owned, not-for-profit organisation that operates core Australian digital-health infrastructure and consumer health services on behalf of the Commonwealth, states, and territories. It runs the free healthdirect symptom checker and health advice service and, most relevant to developers, delivers the National Health Services Directory (NHSD) — the authoritative national directory of health services and practitioners, covering more than 400,000 service and practitioner records. Healthdirect exposes the NHSD to government, commercial, and clinical software developers through standards-based HL7 FHIR APIs (aligned to the HL7 AU Provider Directory / AU-PD implementation guide, using SNOMED CT-AU terminology and G-NAF geocoded addresses), a FHIR bulk data export, a FHIR ingestion/data-acquisition hub for contributing sources, an embeddable NHSD search widget, and a Provider Appointments API that surfaces real-time appointment availability from certified booking platforms. Integration is gated behind a formal onboarding and test-environment registration process, and APIs are secured with OAuth 2.0 client-credentials plus an API key. Home market is Australia.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/healthdirect/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/healthdirect/refs/heads/main/apis.yml)
+**Areas:** Healthcare · Australia · FHIR · HL7 · Interoperability · Provider Directory · National Health System · Health Services Directory · Telehealth · Digital Health · Appointments
 
-## Tags
+## Healthdirect Australia on APIs.io
 
-- Healthcare
-- Australia
-- FHIR
-- HL7
-- Interoperability
-- Provider Directory
-- National Health System
-- Health Services Directory
-- Telehealth
-- Digital Health
-- Appointments
+Everything profiled for Healthdirect Australia is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/healthdirect/](https://apis.io/providers/healthdirect/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (5)
 
-- **Created:** 2026-07-24
-- **Modified:** 2026-07-24
+- [NHSD FHIR API](https://apis.io/apis/healthdirect/nhsd-fhir-api/) — Real-time, read-only HL7 FHIR API over the National Health Services Directory, aligned to the HL7 AU Provider Directory (AU-PD) implementation guide.…
+- [NHSD FHIR Bulk Data Export](https://apis.io/apis/healthdirect/nhsd-fhir-bulk-data-export/) — Read-only HL7 FHIR bulk data export for retrieving large NHSD datasets at a specified frequency, for integrators that need the full directory rather than…
+- [NHSD FHIR Ingestion & Data Acquisition Hub](https://apis.io/apis/healthdirect/nhsd-ingestion-hub/) — HL7 FHIR write/inbound interface for approved data-contributing sources to submit and maintain health service and practitioner records in the National…
+- [NHSD Provider Appointments API](https://apis.io/apis/healthdirect/nhsd-provider-appointments-api/) — API that surfaces real-time appointment availability and booking integration from certified provider booking platforms (AutoMed, HealthEngine, HotDoc,…
+- [NHSD Search Widget](https://apis.io/apis/healthdirect/nhsd-widget/) — Embeddable, responsive NHSD search component that third parties can deploy on websites and mobile apps to let consumers find health services and…
 
-## APIs
+### Published properties
 
-### NHSD FHIR API
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-Real-time, read-only HL7 FHIR API over the National Health Services Directory, aligned to the HL7 AU Provider Directory (AU-PD) implementation guide. Queries Organization, HealthcareService, PractitionerRole, and Practitioner resources — including geospatial, open-now, service-type (SNOMED CT-AU), and identifier searches. Secured with OAuth 2.0 client-credentials plus an `x-api-key` header.
+#### MCP servers (1)
 
-- **Human URL:** [NHSD Integration & Documentation](https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/documentation)
-- **Base URL:** `https://api.fhir.int.nhsd.healthdirect.org.au/v4` (integrator test environment)
-- [FHIR Implementation Guide v4](https://build.fhir.nhsd.healthdirect.org.au/v4/index.html) (geo-restricted to Australia)
-- [Postman Collection](collections/nhsd-developers-portal.postman_collection.json)
+Model Context Protocol servers that expose the API to agents.
 
-### NHSD FHIR Bulk Data Export
+- [healthdirect-nhsd](https://apis.io/servers/healthdirect/healthdirect-nhsd/)
 
-Read-only HL7 FHIR bulk data export for retrieving large NHSD datasets at a specified frequency.
+#### Security (3)
 
-- **Human URL:** [Bulk exports guide](https://build.fhir.nhsd.healthdirect.org.au/v4/bulkexports.html)
+Authentication, trust centre, and vulnerability disclosure.
 
-### NHSD FHIR Ingestion & Data Acquisition Hub
+- [Healthdirect Authentication](https://apis.io/security/healthdirect/healthdirect-authentication/)
+- [Healthdirect Domain Security](https://apis.io/security/healthdirect/healthdirect-domain-security/)
+- [Healthdirect Vulnerability Disclosure](https://apis.io/security/healthdirect/healthdirect-vulnerability-disclosure/)
 
-HL7 FHIR write/inbound interface for approved data-contributing sources to submit and maintain directory records.
+## Where to find this API
 
-- **Human URL:** [Ingestion hub guide](https://build.fhir.nhsd.healthdirect.org.au/ingestion/index.html)
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-### NHSD Provider Appointments API
+- [Website](https://about.healthdirect.gov.au/)
+- [Documentation](https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/documentation)
+- [Getting started](https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/getting-started)
+- [API reference](https://build.fhir.nhsd.healthdirect.org.au/v4/index.html)
+- [Sign up](https://healthdirect-serviceline.atlassian.net/servicedesk/customer/portal/3/group/12/create/44)
+- [Support](https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/technical-support)
+- [Blog](https://about.healthdirect.gov.au/news)
+- [Security](https://www.healthdirect.gov.au/.well-known/security.txt)
+- [Compliance](https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/standards)
+- [Terms of service](https://about.healthdirect.gov.au/terms-of-use)
+- [Privacy policy](https://about.healthdirect.gov.au/privacy-policy)
 
-Surfaces real-time appointment availability and booking from certified provider booking platforms (AutoMed, HealthEngine, HotDoc, MedAdvisor, Medi2Apps).
+## API Evangelist rating
 
-- **Human URL:** [NHSD Integration & Documentation](https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/documentation)
+**Kin Score 36.1** — thin · rubric 0.24.0 · scored 2026-10-17
 
-### NHSD Search Widget
+| Facet | Score |
+|---|---|
+| Discoverability | 69.6 |
+| Contract quality | 0.0 |
+| Contract governance | 18.2 |
+| Operational transparency | 10.5 |
+| Developer ergonomics | 70.4 |
+| Access clarity | 42.1 |
 
-Embeddable, responsive NHSD search component for websites and mobile apps.
+**Agent readiness 4.1** — human-only
 
-- **Human URL:** [Widget implementation guide](https://media.healthdirect.org.au/publications/NHSD_widget-implementation-guide.pdf)
-- **Base URL:** `https://widget.nhsd.healthdirect.org.au/v1/widget/search`
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | — |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
 
-## Standards & Auth
+**Regulatory alignment 32.8** — Health
 
-- **FHIR:** HL7 AU Provider Directory (AU-PD), FHIR R4
-- **Terminology / addressing:** SNOMED CT-AU, G-NAF
-- **Auth:** OAuth 2.0 client-credentials + `x-api-key`
-- **Access:** Gated — integration requires Integrator Test Environment registration, production registration, and an NHSD Agreement (not self-serve)
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/healthdirect/](https://apis.io/providers/healthdirect/).
 
-## Links
+## How this profile is made
 
-- **Developer Portal:** [NHSD Integration Hub](https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub)
-- **Getting Started:** [Onboarding](https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/getting-started)
-- **Support:** [Technical support](https://about.healthdirect.gov.au/what-we-do/portfolio/nhsd/integration-hub/technical-support)
-- **Consumer site:** [healthdirect.gov.au](https://www.healthdirect.gov.au/)
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Healthdirect Australia: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/healthdirect/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
